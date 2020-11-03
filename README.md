@@ -2,14 +2,13 @@
 
 Optimize all PNG, JPG images from directories.
 
-PNG
-``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+## PNG
 
 ![alt text](https://img.shields.io/docker/automated/kolyadin/pngquant.svg)
 ![alt text](https://img.shields.io/docker/build/kolyadin/pngquant.svg)
 ![alt text](https://img.shields.io/docker/pulls/kolyadin/pngquant.svg)
 
-# About
+### About
 
 This docker image is based on [pngquant](https://pngquant.org/) image utility in alpine docker container
 
@@ -166,13 +165,13 @@ $ ls -lh source/
 ```
 
 
-JPG
-```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+## JPG
 
 
-# Usage
 
-## One file optimization
+### Usage
+
+### One file optimization
 You have to mount image folder to optimized into /app directory. Example :
 
 ```
