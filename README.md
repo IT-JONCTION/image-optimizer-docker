@@ -2,13 +2,26 @@
 
 Optimize all PNG, JPG images from directories.
 
-## PNG
+## Too Optimize PNG images 
+```
+docker-compose run --rm  -v "$(pwd)/source/:/var/workdir/" png find . -maxdepth 1 -type f -name "*.png" -exec pngquant --verbose -f --ext .png --quality 80-90 {} \;
+```
+
+## To Optimize JPG images
+```
+docker run --rm -v "$(pwd)/source:/app" -w /app alpine find -iname '*.jpeg' -o -iname '*.jpg' |  xargs docker-compose run --rm -v "$(pwd)/source:/app" jpg --max=90 --strip-all --preserve --totals -v
+```
+
+# PNG
+
+
+
 
 ![alt text](https://img.shields.io/docker/automated/kolyadin/pngquant.svg)
 ![alt text](https://img.shields.io/docker/build/kolyadin/pngquant.svg)
 ![alt text](https://img.shields.io/docker/pulls/kolyadin/pngquant.svg)
 
-### About
+# About
 
 This docker image is based on [pngquant](https://pngquant.org/) image utility in alpine docker container
 
@@ -165,13 +178,13 @@ $ ls -lh source/
 ```
 
 
-## JPG
+# JPG
 
 
 
-### Usage
+# Usage
 
-### One file optimization
+## One file optimization
 You have to mount image folder to optimized into /app directory. Example :
 
 ```
