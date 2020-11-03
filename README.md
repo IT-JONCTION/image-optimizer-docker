@@ -5,91 +5,164 @@ Optimize all PNG, JPG images from directories.
 PNG
 ``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
-## Pull image
+![alt text](https://img.shields.io/docker/automated/kolyadin/pngquant.svg)
+![alt text](https://img.shields.io/docker/build/kolyadin/pngquant.svg)
+![alt text](https://img.shields.io/docker/pulls/kolyadin/pngquant.svg)
+
+# About
+
+This docker image is based on [pngquant](https://pngquant.org/) image utility in alpine docker container
+
+### How to use
 
 ```bash
-docker pull luizeof/image-optimizer
+$ docker run -it --rm kolyadin/pngquant
+
+pngquant, 2.11.2 (November 2017), by Kornel Lesinski, Greg Roelofs.
+   Color profiles are supported via Little CMS. Using libpng 1.6.34.
+
+usage:  pngquant [options] [ncolors] -- pngfile [pngfile ...]
+        pngquant [options] [ncolors] - >stdout <stdin
+
+options:
+  --force           overwrite existing output files (synonym: -f)
+  --skip-if-larger  only save converted files if they're smaller than original
+  --output file     destination file path to use instead of --ext (synonym: -o)
+  --ext new.png     set custom suffix/extension for output filenames
+  --quality min-max don't save below min, use fewer colors below max (0-100)
+  --speed N         speed/quality trade-off. 1=slow, 3=default, 11=fast & rough
+  --nofs            disable Floyd-Steinberg dithering
+  --posterize N     output lower-precision color (e.g. for ARGB4444 output)
+  --strip           remove optional metadata (default on Mac)
+  --verbose         print status messages (synonym: -v)
 ```
 
-## Source directory
+### Demo with creating new file
 
-This container creates a volume at `/source`, so you can mount a local directory to this remote directory and access any file within.
+```bash
+$ docker run -it --rm \
+    -v $(pwd)/source/:/var/workdir/ \
+    kolyadin/pngquant --verbose --output reduced.png --quality 80-90 original.png
+    
+original.png:
+  read 933KB file
+  made histogram...61820 colors found
+  selecting colors...3%
+  selecting colors...24%
+  selecting colors...27%
+  selecting colors...48%
+  selecting colors...68%
+  selecting colors...89%
+  selecting colors...100%
+  moving colormap towards local minimum
+  eliminated opaque tRNS-chunk entries...37 entries transparent
+  mapped image to new colors...MSE=1.963 (Q=93)
+  writing 256-color image as reduced.png
+Quantized 1 image.
 
-***If OptiPNG can optimize the input file it will be overwritten with the optimized one.***
+$ ls -lh source/
 
-## Run
-```
-$ docker run luizeof/image-optimzer -help
-
-OptiPNG 0.6.4: Advanced PNG optimizer.
-Copyright (C) 2001-2010 Cosmin Truta.
-
-Synopsis:
-    optipng [options] files ...
-Files:
-    Image files of type: PNG, BMP, GIF, PNM or TIFF
-Basic options:
-    -?, -h, -help       show this help
-    -o <level>          optimization level (0-7)                default 2
-    -v                  verbose mode / show copyright and version info
-General options:
-    -fix                enable error recovery
-    -force              enforce writing of a new output file
-    -keep               keep a backup of the modified files
-    -preserve           preserve file attributes if possible
-    -quiet              quiet mode
-    -simulate           simulation mode
-    -snip               cut one image out of multi-image or animation files
-    -out <file>         write output file to <file>
-    -dir <directory>    write output file(s) to <directory>
-    -log <file>         log messages to <file>
-    --                  stop option switch parsing
-Optimization options:
-    -f  <filters>       PNG delta filters (0-5)                 default 0,5
-    -i  <type>          PNG interlace type (0-1)                default <input>
-    -zc <levels>        zlib compression levels (1-9)           default 9
-    -zm <levels>        zlib memory levels (1-9)                default 8
-    -zs <strategies>    zlib compression strategies (0-3)       default 0-3
-    -zw <window size>   zlib window size (32k,16k,8k,4k,2k,1k,512,256)
-    -full               produce a full report on IDAT (might reduce speed)
-    -nb                 no bit depth reduction
-    -nc                 no color type reduction
-    -np                 no palette reduction
-    -nx                 no reductions
-    -nz                 no IDAT recoding
-Optimization details:
-    The optimization level presets
-        -o0  <=>  -o1 -nx -nz
-        -o1  <=>  [use the libpng heuristics]   (1 trial)
-        -o2  <=>  -zc9 -zm8 -zs0-3 -f0,5        (8 trials)
-        -o3  <=>  -zc9 -zm8-9 -zs0-3 -f0,5      (16 trials)
-        -o4  <=>  -zc9 -zm8 -zs0-3 -f0-5        (24 trials)
-        -o5  <=>  -zc9 -zm8-9 -zs0-3 -f0-5      (48 trials)
-        -o6  <=>  -zc1-9 -zm8 -zs0-3 -f0-5      (120 trials)
-        -o7  <=>  -zc1-9 -zm8-9 -zs0-3 -f0-5    (240 trials)
-    The libpng heuristics
-        -o1  <=>  -zc9 -zm8 -zs0 -f0            (if PLTE is present)
-        -o1  <=>  -zc9 -zm8 -zs1 -f5            (if PLTE is not present)
-    The most exhaustive search (not generally recommended)
-      [no preset] -zc1-9 -zm1-9 -zs0-3 -f0-5    (1080 trials)
-Examples:
-    optipng file.png                            (default speed)
-    optipng -o5 file.png                        (moderately slow)
-    optipng -o7 file.png                        (very slow)
-    optipng -i1 -o7 -v -full -sim experiment.png
-``` 
-
-### Optimize all images in current folder
-By default this image will compress with `-quiet -o7 *.png` and as such will optimize all images with the best optimization level.
-
-```
-$ docker run -v /local-path-to-image:/source luizeof/image-optimizer -quiet -o7 *.png
+933K original.png
+269K reduced.png
 ```
 
-### Recursivley optimize all images
-The following command finds all images in the current folder (`find...`), mounts it to the Docker volume (`-v ...`) and optimizes the image with the best optimization level (`-o7`).
+### Demo with overwriting original image
+
+```bash
+$ ls -lh source/
+
+933K original.png
+
+$ docker run -it --rm \
+    -v $(pwd)/source/:/var/workdir/ \
+    kolyadin/pngquant --verbose -f --ext .png --quality 80-90 original.png
+    
+original.png:
+  read 933KB file
+  made histogram...61820 colors found
+  selecting colors...3%
+  selecting colors...24%
+  selecting colors...27%
+  selecting colors...48%
+  selecting colors...68%
+  selecting colors...89%
+  selecting colors...100%
+  moving colormap towards local minimum
+  eliminated opaque tRNS-chunk entries...37 entries transparent
+  mapped image to new colors...MSE=1.963 (Q=93)
+  writing 256-color image as original.png
+Quantized 1 image.
+    
+$ ls -lh source/
+
+269K original.png
 ```
-$ find . -name "*.png" | xargs docker run -t -v `pwd`:/source luizeof/image-optimizer -o7
+
+
+### Demo with optimizing all png files in directory
+
+```bash
+$ ls -lh source/
+
+933K a.png
+933K b.png
+933K c.png
+
+$ docker run -it --rm \
+    -v $(pwd)/source/:/var/workdir/ \
+    kolyadin/pngquant find . -maxdepth 1 -type f -name "*.png" -exec pngquant --verbose -f --ext .png --quality 80-90 {} \;
+    
+./b.png:
+  read 933KB file
+  made histogram...61820 colors found
+  selecting colors...3%
+  selecting colors...24%
+  selecting colors...27%
+  selecting colors...48%
+  selecting colors...68%
+  selecting colors...89%
+  selecting colors...100%
+  moving colormap towards local minimum
+  eliminated opaque tRNS-chunk entries...37 entries transparent
+  mapped image to new colors...MSE=1.963 (Q=93)
+  writing 256-color image as b.png
+Quantized 1 image.
+./c.png:
+  read 933KB file
+  made histogram...61820 colors found
+  selecting colors...3%
+  selecting colors...24%
+  selecting colors...27%
+  selecting colors...48%
+  selecting colors...68%
+  selecting colors...89%
+  selecting colors...100%
+  moving colormap towards local minimum
+  eliminated opaque tRNS-chunk entries...37 entries transparent
+  mapped image to new colors...MSE=1.963 (Q=93)
+  writing 256-color image as c.png
+Quantized 1 image.
+./a.png:
+  read 933KB file
+  made histogram...61820 colors found
+  selecting colors...3%
+  selecting colors...24%
+  selecting colors...27%
+  selecting colors...48%
+  selecting colors...68%
+  selecting colors...89%
+  selecting colors...100%
+  moving colormap towards local minimum
+  eliminated opaque tRNS-chunk entries...37 entries transparent
+  mapped image to new colors...MSE=1.963 (Q=93)
+  writing 256-color image as a.png
+Quantized 1 image.
+    
+$ ls -lh source/
+
+269K a.png
+269K b.png
+269K c.png
 ```
 
 

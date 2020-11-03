@@ -4,14 +4,14 @@ services:
     png:
         build:
             context: .
-            dockerfile: ./dockerfile/png/Dockerfile
+            dockerfile: ./docker/png/Dockerfile
         image: luizeof/image-optimizer
         volumes:
-            - ./source:/source
+            - ./source:/var/workdir
     jpg:
         build:
             context: .
-            dockerfile: ./dockerfile/jpg/Dockerfile
+            dockerfile: ./docker/jpg/Dockerfile
         image: pockost/jpegoptim
         volumes:
             - ./source:/app
