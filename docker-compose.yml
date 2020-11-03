@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+    png:
+        build:
+            context: .
+            dockerfile: ./dockerfile/png/Dockerfile
+        image: luizeof/image-optimizer
+        volumes:
+            - ./source:/source
+    jpg:
+        build:
+            context: .
+            dockerfile: ./dockerfile/jpg/Dockerfile
+        image: pockost/jpegoptim
+        volumes:
+            - ./source:/app
