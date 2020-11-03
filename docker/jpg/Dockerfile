@@ -1,6 +1,6 @@
 FROM debian:latest
 
-MAINTAINER Romain THERRAT <romain@pockost.com>
+MAINTAINER Arigoldy <contact@arigoldy.com>
 
 RUN apt-get update && apt-get install -y apt-utils jpegoptim --no-install-recommends && rm -r /var/lib/apt/lists/*
 

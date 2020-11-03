@@ -1,6 +1,6 @@
 FROM alpine:3.7
 
-MAINTAINER aleksey.kolyadin@isobar.ru
+MAINTAINER Arigoldy <contact@arigoldy.com>
 
 RUN apk add --no-cache pngquant
 
