@@ -2,12 +2,12 @@
 
 Optimize all PNG, JPG images from directories.
 
-## Too Optimize PNG images 
+### Too Optimize PNG images 
 ```
 docker-compose run --rm  -v "$(pwd)/source/:/var/workdir/" png find . -maxdepth 1 -type f -name "*.png" -exec pngquant --verbose -f --ext .png --quality 80-90 {} \;
 ```
 
-## To Optimize JPG images
+### To Optimize JPG images
 ```
 docker run --rm -v "$(pwd)/source:/app" -w /app alpine find -iname '*.jpeg' -o -iname '*.jpg' |  xargs docker-compose run --rm -v "$(pwd)/source:/app" jpg --max=90 --strip-all --preserve --totals -v
 ```
