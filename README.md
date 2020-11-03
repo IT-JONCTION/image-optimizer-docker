@@ -2,7 +2,7 @@
 
 Optimize all PNG, JPG images from directories.
 
-### Too Optimize PNG images 
+### To Optimize PNG images 
 ```
 docker-compose run --rm  -v "$(pwd)/source/:/var/workdir/" png find . -maxdepth 1 -type f -name "*.png" -exec pngquant --verbose -f --ext .png --quality 80-90 {} \;
 ```
