@@ -21,7 +21,7 @@ docker run --rm -v "$(pwd)/source:/app" -w /app alpine find -iname '*.jpeg' -o -
 ![alt text](https://img.shields.io/docker/build/kolyadin/pngquant.svg)
 ![alt text](https://img.shields.io/docker/pulls/kolyadin/pngquant.svg)
 
-# About
+### About
 
 This docker image is based on [pngquant](https://pngquant.org/) image utility in alpine docker container
 
